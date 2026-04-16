@@ -6,7 +6,7 @@
 
 执行原则：分步落地、模块拆分、可验收、可复用，每个阶段完成后进行校验，确保Agent执行无偏差，最终交付可直接运行的完整项目。
 
-技术栈：Vue3 + Vite + monaco-editor（代码编辑）+ html-to-image（PNG截图）+ jszip+file-saver（打包下载）+ prettier（代码格式化）
+技术栈：Vue3 + Vite + monaco-editor（代码编辑）+ html-to-image（PNG截图）+ prettier（代码格式化）
 
 # 二、执行阶段拆解（分6个阶段，按顺序执行，每个阶段有明确产出）
 
@@ -18,17 +18,9 @@
 
 ### Agent执行任务
 
-1. 终端执行命令，创建Vite+Vue项目：npm create vite@latest vue-component-builder -- --template vue
+1. 分析需求，选择合适的依赖并安装
 
-2. 进入项目目录：cd vue-component-builder
-
-3. 安装基础依赖：npm install
-
-4. 安装核心依赖：npm install monaco-editor html-to-image jszip file-saver prettier
-
-5. 配置vite.config.js，添加monaco-editor插件，配置路径别名，确保编辑器能正常加载
-
-6. 启动项目：npm run dev，验证项目启动成功（访问http://localhost:5173能看到Vue默认页面）
+2. 分析需求确定项目结构，创建基本目录（src/components、src/utils）
 
 ### 工具/命令
 
@@ -67,6 +59,8 @@ Vue单文件组件（.vue）、CSS样式、VS Code（编辑文件）
 ### 阶段目标
 
 开发左侧CodeEditor组件（VSCode同款编辑器）和右侧Preview组件，实现“左侧写代码、右侧实时渲染”的核心功能，支持Vue语法高亮和代码实时更新。
+
+各个模块（代码、样式面板、预览页等各个组件），其位置都可以拖拽磁吸到页面的任意位置，用户可以根据自己的习惯调整布局，甚至可以将某个模块单独拖拽出来成为一个独立的窗口，支持多窗口操作。
 
 ### Agent执行任务
 
