@@ -15,9 +15,13 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
-    "pinia": "^3.0.4",
-    "vue": "^3.5.31",
-    "vue-router": "^5.0.4"
+    "@vue/compiler-sfc": "^3.5.32",
+    "file-saver": "^2.0.5",
+    "html-to-image": "^1.11.13",
+    "jszip": "^3.10.1",
+    "monaco-editor": "^0.55.1",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "vue": "^3.5.31"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

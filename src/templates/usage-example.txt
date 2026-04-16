@@ -1,0 +1,7 @@
+<script setup lang="ts">
+import Component from './Component.vue'
+</script>
+
+<template>
+  <Component />
+</template>
