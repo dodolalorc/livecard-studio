@@ -30,7 +30,7 @@ function openPopup() {
 
   const popup = window.open(
     '',
-    `html-card-editor-${props.panel.id}`,
+    `vue-card-studio-${props.panel.id}`,
     `width=${Math.round(props.panel.width)},height=${Math.round(props.panel.height)},left=${window.screenX + 80},top=${window.screenY + 80}`,
   )
 
@@ -39,7 +39,7 @@ function openPopup() {
     return
   }
 
-  popup.document.title = `${props.panel.title} - Vue Card Editor`
+  popup.document.title = `${props.panel.title} - Vue Card Studio`
   popup.document.body.innerHTML = '<div id="popup-root"></div>'
   popup.document.body.style.margin = '0'
   popup.document.body.style.background = '#eef3ee'

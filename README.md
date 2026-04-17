@@ -1,4 +1,4 @@
-# html-card-editor
+# vue-card-studio
 
 一个基于 Vue 3 + Vite 的在线组件编辑与调试工具，支持左侧分区编辑、样式面板可视化调参、右侧实时预览，以及代码复制、PNG 截图下载、ZIP 组件打包导出。
 

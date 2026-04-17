@@ -30,7 +30,7 @@ function buildUsageDoc(code: string, controls: StyleControls) {
     : '- 未检测到具名函数。'
 
   return [
-    'Vue Card Editor 导出文档',
+    'Vue Card Studio 导出文档',
     '',
     '1. 文件说明',
     '- Component.vue: 当前编辑器中的组件源码。',
