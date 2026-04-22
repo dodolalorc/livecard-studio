@@ -70,7 +70,7 @@ const emit = defineEmits<{
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #6e7b75;
+  color: #9ca3af;
 }
 
 .toolbar__preset-list {
@@ -82,15 +82,20 @@ const emit = defineEmits<{
 .toolbar__preset,
 .toolbar__actions button {
   padding: 12px 16px;
-  border-radius: 18px;
-  border: none;
-  background:
-    linear-gradient(135deg, #172024 0%, #1d2b29 50%, #2d4942 100%);
-  color: #eff7f2;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #1f2937;
   font: inherit;
   font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 10px 22px rgba(13, 24, 19, 0.18);
+  transition: all 0.2s;
+}
+
+.toolbar__preset:hover,
+.toolbar__actions button:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 .toolbar__preset {
@@ -98,29 +103,31 @@ const emit = defineEmits<{
   display: grid;
   gap: 4px;
   text-align: left;
-  background: #f3f7f4;
-  color: #16211b;
-  border: 1px solid rgba(22, 33, 27, 0.08);
-  box-shadow: none;
 }
 
 .toolbar__preset strong {
   font-size: 13px;
+  color: #1f2937;
 }
 
 .toolbar__preset span {
   font-size: 12px;
   line-height: 1.5;
-  color: #6a7771;
+  color: #9ca3af;
 }
 
 .toolbar__preset--active {
-  background: linear-gradient(135deg, #172024 0%, #2b4138 100%);
-  color: #eff7f2;
+  background: #1f2937;
+  color: #ffffff;
+  border-color: #1f2937;
+}
+
+.toolbar__preset--active strong {
+  color: #ffffff;
 }
 
 .toolbar__preset--active span {
-  color: rgba(239, 247, 242, 0.72);
+  color: #e5e7eb;
 }
 
 .toolbar__actions {

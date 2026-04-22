@@ -66,7 +66,10 @@ function registerVueLanguage() {
         [/[{}]/, 'delimiter.curly'],
         [/".*?"/, 'string'],
         [/'.*?'/, 'string'],
-        [/\b(import|from|const|let|function|return|export|default|defineProps|defineEmits|ref|computed)\b/, 'keyword'],
+        [
+          /\b(import|from|const|let|function|return|export|default|defineProps|defineEmits|ref|computed)\b/,
+          'keyword',
+        ],
         [/\b(template|script|style|setup|scoped|lang)\b/, 'attribute.name'],
         [/[=:]/, 'delimiter'],
         [/\b\d+\b/, 'number'],
@@ -216,19 +219,20 @@ onBeforeUnmount(() => {
 
 .code-panel__editor {
   min-height: 100%;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
+  border: 1px solid #e5e7eb;
 }
 
 .code-panel__meta {
   display: flex;
   gap: 14px;
   padding-top: 12px;
-  color: #94a69c;
+  color: #d1d5db;
   font-size: 12px;
 }
 
 .code-panel__meta-error {
-  color: #d06a57;
+  color: #ef4444;
 }
 </style>

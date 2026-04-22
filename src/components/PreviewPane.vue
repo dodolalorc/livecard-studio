@@ -113,7 +113,7 @@ defineExpose({
 .preview-pane__meta {
   display: flex;
   justify-content: space-between;
-  color: #718078;
+  color: #d1d5db;
   font-size: 12px;
 }
 
@@ -121,10 +121,9 @@ defineExpose({
   flex: 1;
   min-height: 100%;
   padding: 28px;
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at top, rgba(224, 126, 76, 0.18), transparent 30%),
-    linear-gradient(180deg, #f8fbf8 0%, #e9f1eb 100%);
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
 }
 
 .preview-pane__frame {
@@ -132,8 +131,9 @@ defineExpose({
   place-items: center;
   min-height: 100%;
   padding: 28px;
-  border-radius: 20px;
-  border: 1px dashed rgba(24, 43, 32, 0.12);
+  border-radius: 8px;
+  border: 2px dashed #e5e7eb;
+  background: #fafbfc;
 }
 
 .preview-pane__mount {

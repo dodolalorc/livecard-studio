@@ -99,7 +99,9 @@ onBeforeUnmount(() => {
 function emitDragStart(event: PointerEvent) {
   if (props.panel.mode === 'window') return
   emit('focus')
-  const rect = (event.currentTarget as HTMLElement).closest('.workspace-panel')?.getBoundingClientRect()
+  const rect = (event.currentTarget as HTMLElement)
+    .closest('.workspace-panel')
+    ?.getBoundingClientRect()
   if (!rect) return
   emit('drag-start', {
     clientX: event.clientX,
@@ -185,11 +187,12 @@ function emitDragStart(event: PointerEvent) {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-height: 0;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(18, 30, 23, 0.08);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 18px 42px rgba(20, 34, 27, 0.08);
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .workspace-panel--floating {
@@ -208,7 +211,7 @@ function emitDragStart(event: PointerEvent) {
   justify-content: space-between;
   gap: 16px;
   padding: 16px 18px;
-  border-bottom: 1px solid rgba(18, 30, 23, 0.08);
+  border-bottom: 1px solid #e5e7eb;
   cursor: grab;
   user-select: none;
 }
@@ -216,12 +219,12 @@ function emitDragStart(event: PointerEvent) {
 .workspace-panel__title {
   font-size: 15px;
   font-weight: 700;
-  color: #17211b;
+  color: #1f2937;
 }
 
 .workspace-panel__mode {
   font-size: 12px;
-  color: #7b8a83;
+  color: #9ca3af;
 }
 
 .workspace-panel__actions {
@@ -232,13 +235,19 @@ function emitDragStart(event: PointerEvent) {
 
 .workspace-panel__actions button {
   padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(18, 30, 23, 0.08);
-  background: rgba(255, 255, 255, 0.78);
-  color: #233128;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #1f2937;
   font: inherit;
   font-size: 12px;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.workspace-panel__actions button:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 .workspace-panel__body {

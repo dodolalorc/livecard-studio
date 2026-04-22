@@ -294,7 +294,9 @@ onBeforeUnmount(() => {
       >
         <div
           class="workspace__left-top"
-          :style="{ gridTemplateColumns: `${layout.toolWidth}px ${SPLITTER_SIZE}px minmax(0, 1fr)` }"
+          :style="{
+            gridTemplateColumns: `${layout.toolWidth}px ${SPLITTER_SIZE}px minmax(0, 1fr)`,
+          }"
         >
           <section class="panel panel--tools">
             <header class="panel__header">
@@ -407,9 +409,7 @@ onBeforeUnmount(() => {
 .app-shell {
   min-height: 100vh;
   padding: 16px;
-  background:
-    radial-gradient(circle at top left, rgba(239, 171, 92, 0.22), transparent 24%),
-    linear-gradient(135deg, #eef3ee 0%, #dfe8e1 100%);
+  background: #f3f4f6;
 }
 
 .workspace {
@@ -417,12 +417,13 @@ onBeforeUnmount(() => {
   gap: 0;
   height: calc(100vh - 32px);
   min-height: 720px;
-  border-radius: 26px;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(19, 31, 24, 0.08);
-  background: rgba(255, 255, 255, 0.74);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 24px 60px rgba(16, 28, 21, 0.12);
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .workspace--resizing {
@@ -449,18 +450,19 @@ onBeforeUnmount(() => {
   grid-template-rows: auto minmax(0, 1fr);
   padding: 18px;
   overflow: hidden;
+  border-right: 1px solid #e5e7eb;
 }
 
 .panel--tools,
 .panel--style,
 .panel--editor {
-  background: rgba(255, 255, 255, 0.82);
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
 }
 
 .panel--preview {
-  background:
-    radial-gradient(circle at top, rgba(238, 155, 92, 0.14), transparent 22%),
-    rgba(248, 251, 248, 0.88);
+  background: #fafbfc;
+  border-right: none;
 }
 
 .panel__header {
@@ -477,14 +479,14 @@ onBeforeUnmount(() => {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #d17b49;
+  color: #6b7280;
 }
 
 .panel__header h2 {
   margin: 0;
   font-size: 18px;
   line-height: 1.1;
-  color: #17211b;
+  color: #1f2937;
 }
 
 .panel__meta {
@@ -497,14 +499,14 @@ onBeforeUnmount(() => {
 .panel__meta span {
   padding: 8px 10px;
   border-radius: 999px;
-  background: rgba(23, 33, 27, 0.06);
-  color: #607067;
+  background: #f3f4f6;
+  color: #9ca3af;
   font-size: 12px;
 }
 
 .splitter {
   position: relative;
-  background: rgba(23, 33, 27, 0.06);
+  background: #e5e7eb;
 }
 
 .splitter::after {
@@ -512,7 +514,7 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 2px;
   border-radius: 999px;
-  background: rgba(209, 123, 73, 0.42);
+  background: transparent;
 }
 
 .splitter--vertical {
@@ -536,23 +538,26 @@ onBeforeUnmount(() => {
   min-width: 240px;
   max-width: 340px;
   padding: 12px 14px;
-  border-radius: 14px;
-  box-shadow: 0 18px 34px rgba(16, 27, 22, 0.16);
-  background: rgba(255, 255, 255, 0.92);
-  color: #152018;
+  border-radius: 8px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  color: #1f2937;
   font-size: 13px;
+  border-left: 4px solid #d1d5db;
 }
 
 .toast[data-tone='success'] {
-  border-left: 4px solid #2f8f5b;
+  border-left-color: #10b981;
 }
 
 .toast[data-tone='error'] {
-  border-left: 4px solid #c85a4a;
+  border-left-color: #ef4444;
 }
 
 .toast[data-tone='info'] {
-  border-left: 4px solid #487c86;
+  border-left-color: #3b82f6;
 }
 
 @media (max-width: 1100px) {

@@ -1,8 +1,8 @@
 :root {
   color-scheme: light;
-  --app-bg: #edf3ee;
-  --app-text: #18231d;
-  --app-muted: #6e7e76;
+  --app-bg: #fafbfc;
+  --app-text: #1f2937;
+  --app-muted: #9ca3af;
 }
 
 *,
@@ -18,18 +18,14 @@ body,
 }
 
 html {
-  background: var(--app-bg);
+  background: #f3f4f6;
 }
 
 body {
   margin: 0;
   color: var(--app-text);
-  background: var(--app-bg);
-  font-family:
-    'IBM Plex Sans',
-    'SF Pro Display',
-    'Segoe UI',
-    sans-serif;
+  background: #f3f4f6;
+  font-family: 'IBM Plex Sans', 'SF Pro Display', 'Segoe UI', sans-serif;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

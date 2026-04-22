@@ -125,17 +125,21 @@ function patch<K extends keyof StyleControls>(key: K, value: StyleControls[K]) {
 .style-panel__group span,
 .style-panel__sliders span {
   font-size: 12px;
-  color: #66746d;
+  color: #9ca3af;
 }
 
 .style-panel__group input[type='color'] {
   width: 100%;
   height: 48px;
-  border-radius: 14px;
-  border: none;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
   background: transparent;
   padding: 0;
   cursor: pointer;
+}
+
+.style-panel__group input[type='color']:hover {
+  border-color: #d1d5db;
 }
 
 .style-panel__sliders {
@@ -151,23 +155,29 @@ function patch<K extends keyof StyleControls>(key: K, value: StyleControls[K]) {
 
 .style-panel__sliders strong {
   font-size: 13px;
-  color: #1e2c24;
+  color: #1f2937;
 }
 
 .style-panel__sliders input[type='range'] {
   width: 100%;
-  accent-color: #cc7d4a;
+  accent-color: #6366f1;
 }
 
 .style-panel__reset {
   justify-self: start;
   padding: 10px 14px;
-  border: none;
-  border-radius: 999px;
-  background: #152018;
-  color: #eff7f2;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  color: #1f2937;
   font: inherit;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.style-panel__reset:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 @media (max-width: 720px) {
