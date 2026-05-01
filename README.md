@@ -1,27 +1,52 @@
-# vue-card-studio
+# livecard-studio
 
-一个基于 Vue 3 + Vite 的在线组件编辑与调试工具，支持左侧分区编辑、样式面板可视化调参、右侧实时预览，以及代码复制、PNG 截图下载、ZIP 组件打包导出。
+LiveCard Studio 是一个面向程序员的自我介绍卡片工作台。
 
-## 功能概览
+你可以在左侧通过结构化表单录入个人资料，右侧实时预览主题卡片效果，并导出为 HTML、PNG 或 Vue Component 打包文件。
 
-- Monaco Editor 编辑 Vue 单文件组件代码
-- 基于 `@vue/compiler-sfc` 的运行时动态编译与实时预览
-- 内置两个默认示例，包含“介绍卡片”示例
-- 样式调试面板，支持背景色、文字色、强调色、圆角、内边距、阴影透明度同步回写代码
-- 工作区支持三条分割边界拖拽调整尺寸
-- 支持一键格式化代码
-- 支持复制代码、下载 PNG 截图、导出 ZIP 组件包
+## 核心能力
 
-## 技术栈
+- 表单驱动生成：无需写代码，3-5 分钟产出可分享个人卡片
+- 统一数据模型：所有主题组件共用一份 `ProfileCardData` 类型
+- 主题组件化：主题通过独立 Vue 组件贡献，不使用同 DOM 的纯 CSS 换肤
+- 多格式导出：
+  - HTML：可离线打开
+  - PNG：用于社交平台或海报
+  - Vue Component 包：包含主题源码、类型定义、示例数据
 
-- Vue 3
-- Vite
-- Monaco Editor
-- `@vue/compiler-sfc`
-- Prettier
-- `html-to-image`
-- `jszip`
-- `file-saver`
+## 当前内置主题
+
+- Minimal：简约、可读性优先，适合个人主页 About 区块
+- DevFolio：技术感较强，信息密度更高
+
+## 项目结构（核心）
+
+```txt
+src/
+  App.vue
+  data/
+    defaultProfileCard.ts
+  types/
+    profile-card.ts
+  themes/
+    core/
+      theme-types.ts
+      theme-registry.ts
+    minimal/
+      MinimalThemeCard.vue
+      manifest.ts
+    devfolio/
+      DevFolioThemeCard.vue
+      manifest.ts
+    template/
+      ThemeCard.template.vue
+      manifest.template.ts
+  components/
+    PreviewPane.vue
+  utils/
+    exporters.ts
+    profile.ts
+```
 
 ## 本地启动
 
@@ -30,7 +55,7 @@ pnpm install
 pnpm dev
 ```
 
-默认开发地址：
+默认地址：
 
 ```txt
 http://localhost:5173
@@ -44,21 +69,32 @@ pnpm build
 pnpm lint
 ```
 
-## 使用说明
+## 使用流程
 
-1. 左上功能区可切换默认示例，并执行复制、格式化、刷新、PNG、ZIP 操作。
-2. 左上右侧样式面板可调整颜色、圆角、内边距和阴影，变更会同步回写源码中的 CSS 变量。
-3. 左下代码编辑区直接编辑 `.vue` 单文件组件内容。
-4. 右侧预览区默认占一半画面，负责实时渲染结果。
-5. 三条分割线都支持拖拽：左右主分栏、左侧上下分栏、左上工具区与样式区分栏。
+1. 在左侧填写昵称、简介、社交链接、技术栈等信息。
+2. 选择主题（Minimal / DevFolio）和预览比例（1:1 / 4:5 / 16:9）。
+3. 在右侧查看实时预览。
+4. 根据场景导出 HTML、PNG 或 Vue Component 包。
 
 ## 导出说明
 
-- PNG 导出：对预览画布执行高清截图。
-- ZIP 导出：包含 `Component.vue`、`style-tokens.json`、`USAGE.txt`。
+- HTML 导出：生成单文件页面，内嵌数据快照。
+- PNG 导出：对预览画布进行高清截图。
+- Vue Component 导出（zip）：
+  - `ThemeCard.vue`
+  - `profile-card.ts`
+  - `sample-profile.json`
+  - `README.txt`
 
-## 当前实现限制
+## 新增主题方式
 
-- 预览编译器暂不支持从外部模块 `import` 额外依赖，组件逻辑需写在当前单文件组件内部。
-- 由于 Monaco 会打包多语言 worker，生产构建体积较大，当前版本优先保证功能完整性。
-- 小屏场景下会自动退化为纵向堆叠布局，不保留桌面端拖拽分栏体验。
+1. 复制 `src/themes/template` 下模板。
+2. 修改组件结构与视觉样式。
+3. 在 manifest 中声明 `supportedFields` 与 `renderHtml`。
+4. 在 `src/themes/core/theme-registry.ts` 注册新主题。
+
+## 注意事项
+
+- URL 字段支持自动补全协议（`https://`）。
+- 建议先点击“规范化链接”再导出，避免无协议链接失效。
+- 不同主题会按自身布局使用字段，空字段会自动降级隐藏。
