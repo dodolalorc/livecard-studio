@@ -13,7 +13,7 @@ const TARGET_URL_CANDIDATES = [
 const STORAGE_KEY = 'livecard-studio-profile-card-v1'
 
 const EXPORT_TIMEOUT_MS = Number(process.env.LIVECARD_EXPORT_TIMEOUT_MS || 45000)
-const EXPORT_SCENE_PADDING = Number(process.env.LIVECARD_EXPORT_SCENE_PADDING || 72)
+const EXPORT_SCENE_PADDING = Number(process.env.LIVECARD_EXPORT_SCENE_PADDING || 120)
 const EXPORT_CARD_RADIUS = Number(process.env.LIVECARD_EXPORT_CARD_RADIUS || 22)
 
 let activeTargetUrl = TARGET_URL_CANDIDATES[0]
@@ -101,56 +101,79 @@ async function renderCardPng({ cardData, scale = 2, waitMs = 180 }) {
         await root.waitFor({ state: 'visible', timeout: 15000 })
         await waitForImagesIn(root)
 
+        // Disable animations first
         await page.addStyleTag({
             content: `
-        *, *::before, *::after {
-          animation-duration: 0s !important;
-          transition-duration: 0s !important;
-          caret-color: transparent !important;
-        }
-
-                body {
-                    background: radial-gradient(ellipse at 30% 20%, #dce8f8 0%, #c9d9ef 35%, #b8cce4 70%, #adc4de 100%) !important;
+                *, *::before, *::after {
+                    animation-duration: 0s !important;
+                    transition-duration: 0s !important;
+                    caret-color: transparent !important;
                 }
-
-                [data-export-root="profile-card"] {
-                    border-radius: ${Math.max(0, EXPORT_CARD_RADIUS)}px !important;
-                    overflow: hidden !important;
-                    box-shadow:
-                        0 60px 120px rgba(10, 18, 40, 0.40),
-                        0 24px 48px rgba(10, 18, 40, 0.28),
-                        0 6px 14px rgba(10, 18, 40, 0.16) !important;
-                }
-      `,
+            `,
         })
 
         if (waitMs > 0) await page.waitForTimeout(Number(waitMs) || 0)
 
+        // Get the natural card dimensions before any layout manipulation
         const bbox = await root.boundingBox()
         if (!bbox) {
             throw new Error('导出目标不可见，无法计算截图区域')
         }
 
-        const viewport = page.viewportSize() ?? { width: 1440, height: 1400 }
         const padding = Math.max(0, Number(EXPORT_SCENE_PADDING) || 0)
+        const radius = Math.max(0, Number(EXPORT_CARD_RADIUS) || 0)
+        const sceneWidth = Math.ceil(bbox.width + padding * 2)
+        const sceneHeight = Math.ceil(bbox.height + padding * 2)
 
-        const clipX = Math.max(0, Math.floor(bbox.x - padding))
-        const clipY = Math.max(0, Math.floor(bbox.y - padding))
-        const maxClipWidth = viewport.width - clipX
-        const maxClipHeight = viewport.height - clipY
-        const clipWidth = Math.min(maxClipWidth, Math.ceil(bbox.width + padding * 2))
-        const clipHeight = Math.min(maxClipHeight, Math.ceil(bbox.height + padding * 2))
+        // Resize viewport to exactly fit card + padding on all four sides
+        await page.setViewportSize({ width: sceneWidth, height: sceneHeight })
+
+        // Create a fixed full-viewport overlay, move the actual card element into it
+        // so Vue reactivity and computed styles are preserved intact
+        await page.evaluate(
+            ({ pad, rad }) => {
+                const card = document.querySelector('[data-export-root="profile-card"]')
+                if (!card) return
+
+                // Apply card presentation styles
+                card.style.setProperty('border-radius', rad + 'px', 'important')
+                card.style.setProperty('overflow', 'hidden', 'important')
+                card.style.setProperty(
+                    'box-shadow',
+                    [
+                        `0 70px 140px rgba(10, 18, 40, 0.46)`,
+                        `0 28px 56px rgba(10, 18, 40, 0.30)`,
+                        `0 8px 18px rgba(10, 18, 40, 0.18)`,
+                    ].join(', '),
+                    'important',
+                )
+
+                // Build scene overlay
+                const scene = document.createElement('div')
+                scene.id = '__livecard-export-scene__'
+                Object.assign(scene.style, {
+                    position: 'fixed',
+                    inset: '0',
+                    zIndex: '2147483647',
+                    background:
+                        'radial-gradient(ellipse at 30% 20%, #dce8f8 0%, #c9d9ef 35%, #b8cce4 70%, #adc4de 100%)',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'center',
+                    padding: pad + 'px',
+                    boxSizing: 'border-box',
+                })
+
+                scene.appendChild(card)
+                document.body.appendChild(scene)
+            },
+            { pad: padding, rad: radius },
+        )
 
         return await page.screenshot({
             type: 'png',
             omitBackground: false,
             animations: 'disabled',
-            clip: {
-                x: clipX,
-                y: clipY,
-                width: Math.max(1, clipWidth),
-                height: Math.max(1, clipHeight),
-            },
         })
     } finally {
         await context.close()
