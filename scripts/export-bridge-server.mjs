@@ -13,6 +13,8 @@ const TARGET_URL_CANDIDATES = [
 const STORAGE_KEY = 'livecard-studio-profile-card-v1'
 
 const EXPORT_TIMEOUT_MS = Number(process.env.LIVECARD_EXPORT_TIMEOUT_MS || 45000)
+const EXPORT_SCENE_PADDING = Number(process.env.LIVECARD_EXPORT_SCENE_PADDING || 28)
+const EXPORT_CARD_RADIUS = Number(process.env.LIVECARD_EXPORT_CARD_RADIUS || 22)
 
 let activeTargetUrl = TARGET_URL_CANDIDATES[0]
 let renderChain = Promise.resolve()
@@ -106,15 +108,48 @@ async function renderCardPng({ cardData, scale = 2, waitMs = 180 }) {
           transition-duration: 0s !important;
           caret-color: transparent !important;
         }
+
+                body {
+                    background: radial-gradient(circle at 15% 10%, #f8fbff 0%, #eef4fb 48%, #e9f0f8 100%) !important;
+                }
+
+                [data-export-root="profile-card"] {
+                    border-radius: ${Math.max(0, EXPORT_CARD_RADIUS)}px !important;
+                    overflow: hidden !important;
+                    box-shadow:
+                        0 26px 52px rgba(15, 23, 42, 0.16),
+                        0 8px 18px rgba(15, 23, 42, 0.12) !important;
+                }
       `,
         })
 
         if (waitMs > 0) await page.waitForTimeout(Number(waitMs) || 0)
 
-        return await root.screenshot({
+        const bbox = await root.boundingBox()
+        if (!bbox) {
+            throw new Error('导出目标不可见，无法计算截图区域')
+        }
+
+        const viewport = page.viewportSize() ?? { width: 1440, height: 1400 }
+        const padding = Math.max(0, Number(EXPORT_SCENE_PADDING) || 0)
+
+        const clipX = Math.max(0, Math.floor(bbox.x - padding))
+        const clipY = Math.max(0, Math.floor(bbox.y - padding))
+        const maxClipWidth = viewport.width - clipX
+        const maxClipHeight = viewport.height - clipY
+        const clipWidth = Math.min(maxClipWidth, Math.ceil(bbox.width + padding * 2))
+        const clipHeight = Math.min(maxClipHeight, Math.ceil(bbox.height + padding * 2))
+
+        return await page.screenshot({
             type: 'png',
             omitBackground: false,
             animations: 'disabled',
+            clip: {
+                x: clipX,
+                y: clipY,
+                width: Math.max(1, clipWidth),
+                height: Math.max(1, clipHeight),
+            },
         })
     } finally {
         await context.close()
