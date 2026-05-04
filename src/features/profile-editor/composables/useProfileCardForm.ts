@@ -22,10 +22,25 @@ function saveToStorage(data: ProfileCardData): void {
     }
 }
 
+function hydrateProfileCardData(partial: Partial<ProfileCardData>): ProfileCardData {
+    return {
+        ...defaultProfileCardData,
+        ...partial,
+        basic: { ...defaultProfileCardData.basic, ...partial.basic },
+        avatar: { ...defaultProfileCardData.avatar, ...partial.avatar },
+        intro: { ...defaultProfileCardData.intro, ...partial.intro },
+        contacts: { ...defaultProfileCardData.contacts, ...partial.contacts },
+        socials: { ...defaultProfileCardData.socials, ...partial.socials },
+        tech: { ...defaultProfileCardData.tech, ...partial.tech },
+        preferences: { ...defaultProfileCardData.preferences, ...partial.preferences },
+        links: partial.links ?? defaultProfileCardData.links,
+    }
+}
+
 export function useProfileCardForm() {
     const saved = loadFromStorage()
     const cardData = ref<ProfileCardData>(
-        saved ? { ...defaultProfileCardData, ...saved } : structuredClone(defaultProfileCardData),
+        saved ? hydrateProfileCardData(saved) : structuredClone(defaultProfileCardData),
     )
 
     let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -51,7 +66,7 @@ export function useProfileCardForm() {
         try {
             const parsed = JSON.parse(json) as ProfileCardData
             if (!parsed || typeof parsed !== 'object' || !parsed.basic) return false
-            cardData.value = { ...defaultProfileCardData, ...parsed }
+            cardData.value = hydrateProfileCardData(parsed)
             return true
         } catch {
             return false

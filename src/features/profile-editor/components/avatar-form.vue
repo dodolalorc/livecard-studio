@@ -32,6 +32,7 @@ const shapeOptions = [
         @input="update('url', ($event.target as HTMLInputElement).value || undefined)"
       />
       <span class="form-hint">输入公开图片链接（GitHub / Unsplash 等）</span>
+      <span class="form-hint form-hint--left">留空则不显示头像</span>
     </div>
 
     <div v-if="modelValue.url" class="avatar-preview">
@@ -113,5 +114,9 @@ const shapeOptions = [
 
 .form-radio input {
   accent-color: #3b82f6;
+}
+
+.form-hint--left {
+  text-align: left;
 }
 </style>

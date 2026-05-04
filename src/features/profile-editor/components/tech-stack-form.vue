@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ProfileTech } from '@/types/profile-card'
+import type { ProfileTech, ProfileTechStackDisplayMode } from '@/types/profile-card'
 
 const props = defineProps<{
   modelValue: ProfileTech
@@ -74,10 +74,42 @@ function removeLastOf(field: keyof ProfileTech) {
     emit('update:modelValue', { ...props.modelValue, [field]: current.slice(0, -1) })
   }
 }
+
+function updateDisplayMode(mode: ProfileTechStackDisplayMode) {
+  emit('update:modelValue', {
+    ...props.modelValue,
+    stackDisplayMode: mode,
+  })
+}
 </script>
 
 <template>
   <div class="form-section">
+    <div class="form-group">
+      <label class="form-label">技术栈展示方式</label>
+      <div class="display-mode-switch">
+        <button
+          type="button"
+          class="display-mode-switch__btn"
+          :class="{ 'display-mode-switch__btn--active': modelValue.stackDisplayMode !== 'icon' }"
+          @click="updateDisplayMode('tag')"
+        >
+          Tag 模式
+        </button>
+        <button
+          type="button"
+          class="display-mode-switch__btn"
+          :class="{ 'display-mode-switch__btn--active': modelValue.stackDisplayMode === 'icon' }"
+          @click="updateDisplayMode('icon')"
+        >
+          Skill Icons 模式
+        </button>
+      </div>
+      <span class="form-hint form-hint--left">
+        图标模式会根据技术栈名称生成 skillicons.dev 图标
+      </span>
+    </div>
+
     <!-- Tech stacks -->
     <div class="form-group">
       <label class="form-label">技术栈</label>
@@ -150,5 +182,34 @@ function removeLastOf(field: keyof ProfileTech) {
 .tag-pill--tag {
   background: #f1f5f9;
   color: #64748b;
+}
+
+.display-mode-switch {
+  display: inline-flex;
+  border: 1px solid #dbe5f2;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fbff;
+  width: fit-content;
+}
+
+.display-mode-switch__btn {
+  border: none;
+  background: transparent;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: #51627d;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.display-mode-switch__btn--active {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.form-hint--left {
+  text-align: left;
 }
 </style>

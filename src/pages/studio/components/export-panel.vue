@@ -11,19 +11,17 @@ const props = defineProps<{
 const emit = defineEmits<{
   exportHtml: []
   exportPng: []
-  exportZip: []
   'update:exportScale': [value: number]
 }>()
 
-const busy = ref<'html' | 'png' | 'zip' | null>(null)
+const busy = ref<'html' | 'png' | null>(null)
 
-async function doExport(type: 'html' | 'png' | 'zip') {
+async function doExport(type: 'html' | 'png') {
   if (busy.value) return
   busy.value = type
   try {
     if (type === 'html') emit('exportHtml')
-    else if (type === 'png') emit('exportPng')
-    else emit('exportZip')
+    else emit('exportPng')
   } finally {
     // reset after brief delay to show feedback
     setTimeout(() => {
@@ -62,9 +60,6 @@ const scaleOptions = [1, 2, 3]
       </button>
       <button class="export-btn export-btn--png" :disabled="busy !== null" @click="doExport('png')">
         {{ busy === 'png' ? '导出中…' : '🖼 PNG' }}
-      </button>
-      <button class="export-btn export-btn--zip" :disabled="busy !== null" @click="doExport('zip')">
-        {{ busy === 'zip' ? '打包中…' : '📦 Vue Component' }}
       </button>
     </div>
   </div>
@@ -150,14 +145,5 @@ const scaleOptions = [1, 2, 3]
 
 .export-btn--png:hover:not(:disabled) {
   background: #dbeafe;
-}
-
-.export-btn--zip {
-  background: #faf5ff;
-  color: #7c3aed;
-}
-
-.export-btn--zip:hover:not(:disabled) {
-  background: #ede9fe;
 }
 </style>

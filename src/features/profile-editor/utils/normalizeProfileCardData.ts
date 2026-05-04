@@ -54,6 +54,7 @@ export function normalizeProfileCardData(data: ProfileCardData): ProfileCardData
         },
         socials: normalizeSocials(data.socials),
         tech: {
+            stackDisplayMode: data.tech.stackDisplayMode === 'icon' ? 'icon' : 'tag',
             stacks: data.tech.stacks.map((s) => s.trim().slice(0, 24)).filter(Boolean).slice(0, 16),
             focusAreas: data.tech.focusAreas.map((s) => s.trim().slice(0, 24)).filter(Boolean).slice(0, 16),
             tags: data.tech.tags.map((s) => s.trim().slice(0, 24)).filter(Boolean).slice(0, 16),
@@ -63,5 +64,13 @@ export function normalizeProfileCardData(data: ProfileCardData): ProfileCardData
             label: link.label.trim(),
             url: normalizeGenericUrl(link.url) ?? link.url,
         })),
+        preferences: {
+            ...data.preferences,
+            backgroundImage: {
+                enabled: Boolean(data.preferences.backgroundImage?.enabled),
+                url: data.preferences.backgroundImage?.url?.trim(),
+                coverage: data.preferences.backgroundImage?.coverage === 'card' ? 'card' : 'header',
+            },
+        },
     }
 }

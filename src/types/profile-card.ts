@@ -58,10 +58,13 @@ export interface ProfileSocials {
 }
 
 export interface ProfileTech {
+    stackDisplayMode: ProfileTechStackDisplayMode
     stacks: string[]
     focusAreas: string[]
     tags: string[]
 }
+
+export type ProfileTechStackDisplayMode = 'tag' | 'icon'
 
 export interface ProfileCustomLink {
     id: string
@@ -76,6 +79,15 @@ export interface ProfileCardPreferences {
     accentColor?: string
     canvasSize: ProfileCardCanvasSize
     exportScale: number
+    backgroundImage: ProfileCardBackgroundImageOptions
 }
 
 export type ProfileCardCanvasSize = 'square' | 'portrait' | 'landscape' | 'auto'
+
+export type ProfileCardBackgroundCoverage = 'header' | 'card'
+
+export interface ProfileCardBackgroundImageOptions {
+    enabled: boolean
+    url?: string
+    coverage: ProfileCardBackgroundCoverage
+}

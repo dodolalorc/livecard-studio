@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import type { ProfileCardData } from '@/types/profile-card'
 import BasicInfoForm from '@/features/profile-editor/components/basic-info-form.vue'
 import AvatarForm from '@/features/profile-editor/components/avatar-form.vue'
+import BackgroundImageForm from '@/features/profile-editor/components/background-image-form.vue'
 import IntroForm from '@/features/profile-editor/components/intro-form.vue'
 import SocialLinksForm from '@/features/profile-editor/components/social-links-form.vue'
 import TechStackForm from '@/features/profile-editor/components/tech-stack-form.vue'
@@ -51,6 +52,10 @@ function updateTech(val: ProfileCardData['tech']) {
 function updateLinks(val: ProfileCardData['links']) {
   emit('update:modelValue', { ...props.modelValue, links: val })
 }
+
+function updatePreferences(val: ProfileCardData['preferences']) {
+  emit('update:modelValue', { ...props.modelValue, preferences: val })
+}
 </script>
 
 <template>
@@ -75,6 +80,10 @@ function updateLinks(val: ProfileCardData['links']) {
       />
       <template v-else-if="activeTab === 'avatar'">
         <AvatarForm :model-value="modelValue.avatar" @update:model-value="updateAvatar" />
+        <BackgroundImageForm
+          :model-value="modelValue.preferences"
+          @update:model-value="updatePreferences"
+        />
         <IntroForm
           :model-value="modelValue.intro"
           @update:model-value="updateIntro"

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ProfileCardData } from '@/types/profile-card'
-import ThemePicker from './theme-picker.vue'
 import ExportPanel from './export-panel.vue'
 
 const props = defineProps<{
@@ -11,13 +10,8 @@ const emit = defineEmits<{
   'update:data': [value: ProfileCardData]
   exportHtml: []
   exportPng: []
-  exportZip: []
   reset: []
 }>()
-
-function updatePreferences(val: ProfileCardData['preferences']) {
-  emit('update:data', { ...props.data, preferences: val })
-}
 
 function updateExportScale(scale: number) {
   emit('update:data', {
@@ -36,15 +30,12 @@ function updateExportScale(scale: number) {
     </div>
 
     <div class="studio-header__tools">
-      <ThemePicker :model-value="data.preferences" @update:model-value="updatePreferences" />
-
       <ExportPanel
         :data="data"
         :theme-id="data.preferences.themeId"
         :export-scale="data.preferences.exportScale"
         @export-html="emit('exportHtml')"
         @export-png="emit('exportPng')"
-        @export-zip="emit('exportZip')"
         @update:export-scale="updateExportScale"
       />
 

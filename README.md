@@ -1,3 +1,66 @@
+## PNG 导出（Node + Playwright，高还原）
+
+如果你追求更高还原度（避免浏览器端 html-to-image 的渲染差异），可以使用 Playwright 直接截图卡片根节点。
+
+## 右上角按钮走 Playwright（本地桥接服务）
+
+如果你希望页面内“导出 PNG”按钮也使用 Playwright，而不是浏览器端截图，需要先启动本地桥接服务。
+
+### 1) 启动你的前端页面
+
+开发模式默认是:
+
+pnpm dev
+
+服务地址通常是:
+
+http://127.0.0.1:5173
+
+### 2) 启动导出桥接服务
+
+pnpm export:bridge
+
+默认桥接地址:
+
+http://127.0.0.1:3210/api/export/png
+
+### 3) 可选环境变量
+
+你可以通过环境变量覆盖桥接服务配置:
+
+- LIVECARD_EXPORT_BRIDGE_PORT: 桥接服务监听端口（默认 3210）
+- LIVECARD_EXPORT_TARGET_URL: Playwright 打开的前端页面 URL（默认 http://127.0.0.1:5173）
+
+前端可通过 Vite 环境变量覆盖请求地址:
+
+- VITE_EXPORT_BRIDGE_URL: 默认 http://127.0.0.1:3210/api/export/png
+
+启动后，右上角“导出 PNG”按钮会直接调用本地 Playwright 服务生成截图。
+
+### 常见失败原因与排查
+
+1. 本地桥接服务没启动
+
+- 现象: 页面提示“本地导出服务未启动”
+- 处理: 运行 `pnpm export:bridge`
+
+2. 前端页面地址不匹配
+
+- 现象: 服务返回“目标页面不可访问”
+- 原因: 你可能在 4173 或 localhost 启动，而桥接默认去 5173
+- 处理: 设置 `LIVECARD_EXPORT_TARGET_URL` 指向实际地址，或直接访问 `http://127.0.0.1:3210/health` 查看服务探测到的目标
+
+3. 导出超时
+
+- 现象: 返回“导出超时”
+- 原因: 背景图/头像外链响应慢，或本机负载高
+- 处理: 优先使用可访问且稳定的图片地址；必要时提升 `LIVECARD_EXPORT_TIMEOUT_MS`（默认 45000）
+
+4. 并发导出冲突
+
+- 现象: 连续点击按钮偶发失败
+- 处理: 桥接服务已改为串行队列处理；等待前一个导出完成再点击更稳
+
 # livecard-studio
 
 LiveCard Studio 是一个面向程序员的自我介绍卡片工作台。
