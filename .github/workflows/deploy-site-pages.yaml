@@ -1,4 +1,4 @@
-name: Deploy PRISM on GitHub Pages
+name: Deploy GitHub Pages
 
 on:
   push:
@@ -24,11 +24,8 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Remove bun.lock
-        run: |
-          rm -f bun.lock
       - name: Install Dependencies
-        run: bun install
+        run: bun install --frozen-lockfile
       - name: Build Vite site
         run: |
           bun run build
