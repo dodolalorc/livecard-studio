@@ -13,7 +13,7 @@ const TARGET_URL_CANDIDATES = [
 const STORAGE_KEY = 'livecard-studio-profile-card-v1'
 
 const EXPORT_TIMEOUT_MS = Number(process.env.LIVECARD_EXPORT_TIMEOUT_MS || 45000)
-const EXPORT_SCENE_PADDING = Number(process.env.LIVECARD_EXPORT_SCENE_PADDING || 28)
+const EXPORT_SCENE_PADDING = Number(process.env.LIVECARD_EXPORT_SCENE_PADDING || 72)
 const EXPORT_CARD_RADIUS = Number(process.env.LIVECARD_EXPORT_CARD_RADIUS || 22)
 
 let activeTargetUrl = TARGET_URL_CANDIDATES[0]
@@ -110,15 +110,16 @@ async function renderCardPng({ cardData, scale = 2, waitMs = 180 }) {
         }
 
                 body {
-                    background: radial-gradient(circle at 15% 10%, #f8fbff 0%, #eef4fb 48%, #e9f0f8 100%) !important;
+                    background: radial-gradient(ellipse at 30% 20%, #dce8f8 0%, #c9d9ef 35%, #b8cce4 70%, #adc4de 100%) !important;
                 }
 
                 [data-export-root="profile-card"] {
                     border-radius: ${Math.max(0, EXPORT_CARD_RADIUS)}px !important;
                     overflow: hidden !important;
                     box-shadow:
-                        0 26px 52px rgba(15, 23, 42, 0.16),
-                        0 8px 18px rgba(15, 23, 42, 0.12) !important;
+                        0 60px 120px rgba(10, 18, 40, 0.40),
+                        0 24px 48px rgba(10, 18, 40, 0.28),
+                        0 6px 14px rgba(10, 18, 40, 0.16) !important;
                 }
       `,
         })
