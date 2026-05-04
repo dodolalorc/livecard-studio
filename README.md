@@ -8,13 +8,13 @@
 
 ## 核心能力
 
-| 能力 | 说明 |
-|------|------|
-| 表单驱动 | 无需写代码，填写即所见 |
-| 实时预览 | 数据变更立即同步到卡片 |
-| 多主题 | 主题基于独立 Vue 组件，互不影响 |
+| 能力       | 说明                                  |
+| ---------- | ------------------------------------- |
+| 表单驱动   | 无需写代码，填写即所见                |
+| 实时预览   | 数据变更立即同步到卡片                |
+| 多主题     | 主题基于独立 Vue 组件，互不影响       |
 | 多格式导出 | HTML（可离线打开）/ PNG（可配置倍率） |
-| 本地持久化 | 数据自动保存到 localStorage |
+| 本地持久化 | 数据自动保存到 localStorage           |
 
 ---
 
@@ -22,6 +22,21 @@
 
 - **Minimal Clean** — 简约可读，适合个人主页 About 区块
 - **DevFolio Soft** — 技术感较强，信息密度更高，支持背景图覆盖模式
+
+---
+
+## 效果预览
+
+### Demo 使用样例
+
+![Livecard Studio Demo](public/images/demo.gif)
+
+### 卡片效果图
+
+| 主题          | 标准效果                                          | 背景图覆盖效果                                                  |
+| ------------- | ------------------------------------------------- | --------------------------------------------------------------- |
+| Minimal Clean | ![Minimal Clean](public/images/minimal-clean.png) | ![Minimal Clean Background](public/images/minimal-clean-bg.png) |
+| DevFolio Soft | ![DevFolio Soft](public/images/devfolio-soft.png) | ![DevFolio Soft Background](public/images/devfolio-soft-bg.png) |
 
 ---
 
@@ -108,12 +123,12 @@ pnpm export:bridge
 
 **可选环境变量**
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
-| `LIVECARD_EXPORT_BRIDGE_PORT` | 桥接服务端口 | `3210` |
-| `LIVECARD_EXPORT_TARGET_URL` | Playwright 打开的前端地址 | `http://127.0.0.1:5173` |
-| `VITE_EXPORT_BRIDGE_URL` | 前端请求桥接的地址（Vite 环境变量） | `http://127.0.0.1:3210/api/export/png` |
-| `LIVECARD_EXPORT_TIMEOUT_MS` | 导出超时时间（ms） | `45000` |
+| 变量                          | 说明                                | 默认值                                 |
+| ----------------------------- | ----------------------------------- | -------------------------------------- |
+| `LIVECARD_EXPORT_BRIDGE_PORT` | 桥接服务端口                        | `3210`                                 |
+| `LIVECARD_EXPORT_TARGET_URL`  | Playwright 打开的前端地址           | `http://127.0.0.1:5173`                |
+| `VITE_EXPORT_BRIDGE_URL`      | 前端请求桥接的地址（Vite 环境变量） | `http://127.0.0.1:3210/api/export/png` |
+| `LIVECARD_EXPORT_TIMEOUT_MS`  | 导出超时时间（ms）                  | `45000`                                |
 
 **常见问题**
 
