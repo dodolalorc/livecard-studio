@@ -1,115 +1,55 @@
-## PNG 导出（Node + Playwright，高还原）
+﻿# livecard-studio
 
-如果你追求更高还原度（避免浏览器端 html-to-image 的渲染差异），可以使用 Playwright 直接截图卡片根节点。
+面向程序员的自我介绍卡片工作台。
 
-## 右上角按钮走 Playwright（本地桥接服务）
+在左侧通过结构化表单填写个人资料，右侧实时预览主题卡片效果，并一键导出为 HTML 或 PNG，3-5 分钟产出可分享的个人卡片。
 
-如果你希望页面内“导出 PNG”按钮也使用 Playwright，而不是浏览器端截图，需要先启动本地桥接服务。
-
-### 1) 启动你的前端页面
-
-开发模式默认是:
-
-pnpm dev
-
-服务地址通常是:
-
-http://127.0.0.1:5173
-
-### 2) 启动导出桥接服务
-
-pnpm export:bridge
-
-默认桥接地址:
-
-http://127.0.0.1:3210/api/export/png
-
-### 3) 可选环境变量
-
-你可以通过环境变量覆盖桥接服务配置:
-
-- LIVECARD_EXPORT_BRIDGE_PORT: 桥接服务监听端口（默认 3210）
-- LIVECARD_EXPORT_TARGET_URL: Playwright 打开的前端页面 URL（默认 http://127.0.0.1:5173）
-
-前端可通过 Vite 环境变量覆盖请求地址:
-
-- VITE_EXPORT_BRIDGE_URL: 默认 http://127.0.0.1:3210/api/export/png
-
-启动后，右上角“导出 PNG”按钮会直接调用本地 Playwright 服务生成截图。
-
-### 常见失败原因与排查
-
-1. 本地桥接服务没启动
-
-- 现象: 页面提示“本地导出服务未启动”
-- 处理: 运行 `pnpm export:bridge`
-
-2. 前端页面地址不匹配
-
-- 现象: 服务返回“目标页面不可访问”
-- 原因: 你可能在 4173 或 localhost 启动，而桥接默认去 5173
-- 处理: 设置 `LIVECARD_EXPORT_TARGET_URL` 指向实际地址，或直接访问 `http://127.0.0.1:3210/health` 查看服务探测到的目标
-
-3. 导出超时
-
-- 现象: 返回“导出超时”
-- 原因: 背景图/头像外链响应慢，或本机负载高
-- 处理: 优先使用可访问且稳定的图片地址；必要时提升 `LIVECARD_EXPORT_TIMEOUT_MS`（默认 45000）
-
-4. 并发导出冲突
-
-- 现象: 连续点击按钮偶发失败
-- 处理: 桥接服务已改为串行队列处理；等待前一个导出完成再点击更稳
-
-# livecard-studio
-
-LiveCard Studio 是一个面向程序员的自我介绍卡片工作台。
-
-你可以在左侧通过结构化表单录入个人资料，右侧实时预览主题卡片效果，并导出为 HTML、PNG 或 Vue Component 打包文件。
+---
 
 ## 核心能力
 
-- 表单驱动生成：无需写代码，3-5 分钟产出可分享个人卡片
-- 统一数据模型：所有主题组件共用一份 `ProfileCardData` 类型
-- 主题组件化：主题通过独立 Vue 组件贡献，不使用同 DOM 的纯 CSS 换肤
-- 多格式导出：
-  - HTML：可离线打开
-  - PNG：用于社交平台或海报
-  - Vue Component 包：包含主题源码、类型定义、示例数据
+| 能力 | 说明 |
+|------|------|
+| 表单驱动 | 无需写代码，填写即所见 |
+| 实时预览 | 数据变更立即同步到卡片 |
+| 多主题 | 主题基于独立 Vue 组件，互不影响 |
+| 多格式导出 | HTML（可离线打开）/ PNG（可配置倍率） |
+| 本地持久化 | 数据自动保存到 localStorage |
 
-## 当前内置主题
+---
 
-- Minimal：简约、可读性优先，适合个人主页 About 区块
-- DevFolio：技术感较强，信息密度更高
+## 内置主题
 
-## 项目结构（核心）
+- **Minimal Clean** — 简约可读，适合个人主页 About 区块
+- **DevFolio Soft** — 技术感较强，信息密度更高，支持背景图覆盖模式
 
-```txt
-src/
-  App.vue
-  data/
-    defaultProfileCard.ts
-  types/
-    profile-card.ts
-  themes/
-    core/
-      theme-types.ts
-      theme-registry.ts
-    minimal/
-      MinimalThemeCard.vue
-      manifest.ts
-    devfolio/
-      DevFolioThemeCard.vue
-      manifest.ts
-    template/
-      ThemeCard.template.vue
-      manifest.template.ts
-  components/
-    PreviewPane.vue
-  utils/
-    exporters.ts
-    profile.ts
+---
+
+## 项目结构
+
 ```
+src/
+  types/
+    profile-card.ts          # 统一数据类型 ProfileCardData
+  data/
+    default-profile-card.ts  # 默认示例数据
+  features/
+    profile-editor/          # 左侧表单（6 个 Tab 分区）
+    export-card/             # 导出逻辑（HTML / PNG）
+  pages/
+    studio/                  # 工作台主页面
+  themes/
+    core/                    # 主题注册、类型、渲染器
+    minimal-clean/           # 主题：Minimal Clean
+    devfolio-soft/           # 主题：DevFolio Soft
+    template/                # 新主题模板
+scripts/
+  export-bridge-server.mjs   # Playwright 高还原 PNG 导出桥接服务
+```
+
+> 主题通过 `import.meta.glob('@/themes/*/manifest.ts')` 自动发现，新增主题无需手动注册。
+
+---
 
 ## 本地启动
 
@@ -118,46 +58,83 @@ pnpm install
 pnpm dev
 ```
 
-默认地址：
-
-```txt
-http://localhost:5173
-```
+默认地址：`http://localhost:5173`
 
 ## 构建与校验
 
 ```sh
-pnpm type-check
-pnpm build
-pnpm lint
+pnpm type-check   # TypeScript 类型检查
+pnpm build        # 生产构建
+pnpm lint         # oxlint + eslint
 ```
+
+---
 
 ## 使用流程
 
-1. 在左侧填写昵称、简介、社交链接、技术栈等信息。
-2. 选择主题（Minimal / DevFolio）和预览比例（1:1 / 4:5 / 16:9）。
-3. 在右侧查看实时预览。
-4. 根据场景导出 HTML、PNG 或 Vue Component 包。
+1. 在左侧 6 个 Tab 依次填写：基础信息、头像简介、介绍、社交链接、技术栈、自定义链接。
+2. 在预览区底部切换主题，选择适合自己的风格。
+3. 在顶部导出面板选择倍率，点击 **HTML** 或 **PNG** 导出。
+
+---
 
 ## 导出说明
 
-- HTML 导出：生成单文件页面，内嵌数据快照。
-- PNG 导出：对预览画布进行高清截图。
-- Vue Component 导出（zip）：
-  - `ThemeCard.vue`
-  - `profile-card.ts`
-  - `sample-profile.json`
-  - `README.txt`
+### HTML
 
-## 新增主题方式
+生成单文件页面，内嵌样式与数据快照，可离线打开。
 
-1. 复制 `src/themes/template` 下模板。
+### PNG（浏览器端）
+
+直接对预览画布截图，使用 `html-to-image` 生成，支持 1x / 2x / 3x 缩放倍率。
+
+### PNG（Playwright 高还原，可选）
+
+若需要更高还原度，可启动本地桥接服务，由 Playwright 直接截图：
+
+**1. 启动前端**
+
+```sh
+pnpm dev
+# 默认：http://127.0.0.1:5173
+```
+
+**2. 启动桥接服务**
+
+```sh
+pnpm export:bridge
+# 默认监听：http://127.0.0.1:3210/api/export/png
+```
+
+**可选环境变量**
+
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `LIVECARD_EXPORT_BRIDGE_PORT` | 桥接服务端口 | `3210` |
+| `LIVECARD_EXPORT_TARGET_URL` | Playwright 打开的前端地址 | `http://127.0.0.1:5173` |
+| `VITE_EXPORT_BRIDGE_URL` | 前端请求桥接的地址（Vite 环境变量） | `http://127.0.0.1:3210/api/export/png` |
+| `LIVECARD_EXPORT_TIMEOUT_MS` | 导出超时时间（ms） | `45000` |
+
+**常见问题**
+
+- **"本地导出服务未启动"** — 运行 `pnpm export:bridge`
+- **"目标页面不可访问"** — 前端实际端口与 `LIVECARD_EXPORT_TARGET_URL` 不一致，手动设置该变量
+- **导出超时** — 背景图/头像外链响应慢，换用稳定图片地址或提升 `LIVECARD_EXPORT_TIMEOUT_MS`
+- **连续点击偶发失败** — 桥接服务已串行化处理，等待前一个完成再操作
+
+---
+
+## 新增主题
+
+1. 复制 `src/themes/template/` 下的模板文件。
 2. 修改组件结构与视觉样式。
-3. 在 manifest 中声明 `supportedFields` 与 `renderHtml`。
-4. 在 `src/themes/core/theme-registry.ts` 注册新主题。
+3. 在 `manifest.ts` 中声明 `id`、`name`、`supportedFields` 等元信息。
+4. 无需手动注册，主题会被自动发现。
+
+---
 
 ## 注意事项
 
-- URL 字段支持自动补全协议（`https://`）。
-- 建议先点击“规范化链接”再导出，避免无协议链接失效。
-- 不同主题会按自身布局使用字段，空字段会自动降级隐藏。
+- URL 字段支持自动补全 `https://` 协议前缀。
+- 不同主题按自身布局使用字段，空字段自动降级隐藏。
+- 数据持久化 key：`livecard-studio-profile-card-v1`。
