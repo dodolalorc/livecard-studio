@@ -6,6 +6,16 @@
 
 ---
 
+
+## 卡片效果图
+
+| 主题          | 标准效果                                          | 背景图覆盖效果                                                  |
+| ------------- | ------------------------------------------------- | --------------------------------------------------------------- |
+| Minimal Clean | ![Minimal Clean](public/images/minimal-clean.png) | ![Minimal Clean Background](public/images/minimal-clean-bg.png) |
+| DevFolio Soft | ![DevFolio Soft](public/images/devfolio-soft.png) | ![DevFolio Soft Background](public/images/devfolio-soft-bg.png) |
+
+---
+
 ## 核心能力
 
 | 能力       | 说明                                  |
@@ -22,21 +32,6 @@
 
 - **Minimal Clean** — 简约可读，适合个人主页 About 区块
 - **DevFolio Soft** — 技术感较强，信息密度更高，支持背景图覆盖模式
-
----
-
-## 效果预览
-
-### Demo 使用样例
-
-![Livecard Studio Demo](public/images/demo.gif)
-
-### 卡片效果图
-
-| 主题          | 标准效果                                          | 背景图覆盖效果                                                  |
-| ------------- | ------------------------------------------------- | --------------------------------------------------------------- |
-| Minimal Clean | ![Minimal Clean](public/images/minimal-clean.png) | ![Minimal Clean Background](public/images/minimal-clean-bg.png) |
-| DevFolio Soft | ![DevFolio Soft](public/images/devfolio-soft.png) | ![DevFolio Soft Background](public/images/devfolio-soft-bg.png) |
 
 ---
 
